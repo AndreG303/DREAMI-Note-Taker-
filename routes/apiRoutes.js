@@ -37,12 +37,12 @@ module.exports = function (app) {
             console.log(data);
 
 
-            const notesInput = JSON.parse(data);
-            notesInput.push(newNote);
+            const notesInput = res.json(data);
+            notesData.push(newNote);
 
-            fs.writeFile("../db/db.json", JSON.stringify(notesInput, null, 2), err => {
+            fs.writeFile("../db/db.json", JSON.stringify(notesData), err => {
                 if (err) {console.log (err)}
-                res.send(db);
+                res.send(newNote);
                 console.log('Your Note has been saved!');
 
             });
@@ -56,11 +56,11 @@ module.exports = function (app) {
         fs.readFile("../db/db.json", "utf8", (err, data) => {
             if (err) throw err;
             const notesInput = JSON.parse(data);
-            const notesData = notesData.filter((e, i) => i != noteID);
+            const filterNotes = notesData.filter((e, i) => i != noteID);
 
             fs.writeFile("../db/db.json", JSON.stringify(notesData, null, 2), err => {
                 if (err) throw err;
-                res.send(db);
+                res.send(filterNotes);
                 console.log("Your note has been deleted!")
             });
         });
