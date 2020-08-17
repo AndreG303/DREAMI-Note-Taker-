@@ -3,7 +3,7 @@
 // We are linking our routes to a series of "data" sources
 // ===============================================================================
 
-const notesData = require("../db/db.json");
+let notesData = require("../db/db.json");
 const fs = require("fs");
 const { uuid } = require("uuidv4");
 const path = require("path");
@@ -43,19 +43,22 @@ module.exports = function (app) {
 
     app.delete("/api/notes/:id", (req, res) => {
         let noteID = req.params.id;
+        console.log(noteID);
 
         fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
             if (err) { console.log(err) }
-            const notesInput = JSON.parse(data);
-            const filterNotes = notesInput.filter((note) => {
+            let notesInput = JSON.parse(data);
+            notesData = notesInput.filter((note) => {
                 return note.id !== noteID
             });
+            console.log("filtered Notes:", notesData);
+            console.log("original notes:", notesInput);
 
 
-            fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(filterNotes), err => {
+            fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notesData), err => {
                 if (err) { console.log(err) }
-                console.log(filterNotes);
-                res.send(filterNotes);
+                console.log(notesData);
+                res.send(notesData);
                 console.log("Your note has been deleted!")
             });
         });
