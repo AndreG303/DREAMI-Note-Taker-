@@ -43,7 +43,6 @@ module.exports = function (app) {
 
     app.delete("/api/notes/:id", (req, res) => {
         let noteID = req.params.id;
-        console.log(noteID);
 
         fs.readFile(path.join(__dirname, "../db/db.json"), "utf8", (err, data) => {
             if (err) { console.log(err) }
@@ -51,8 +50,6 @@ module.exports = function (app) {
             notesData = notesInput.filter((note) => {
                 return note.id !== noteID
             });
-            console.log("filtered Notes:", notesData);
-            console.log("original notes:", notesInput);
 
 
             fs.writeFile(path.join(__dirname, "../db/db.json"), JSON.stringify(notesData), err => {
